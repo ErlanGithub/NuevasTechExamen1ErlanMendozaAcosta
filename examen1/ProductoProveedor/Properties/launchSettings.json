@@ -3,7 +3,9 @@
     "ProductoProveedor": {
       "commandName": "Project",
       "commandLineArgs": "--port 7159",
-      "launchBrowser": false
+      "environmentVariables": {
+        "cadenaconexion": "DefaultEndpointsProtocol=https;AccountName=examenerlanmendoza;AccountKey=Oi+c4NU//72rl7azbOMz8chl54y3UDLh6/0aORjlf/2qhi8smXHq82hoQ0nyOZyyHf4HkIZ6Ia4U+ASt9ncu1Q==;EndpointSuffix=core.windows.net"
+      }
     }
   }
 }
