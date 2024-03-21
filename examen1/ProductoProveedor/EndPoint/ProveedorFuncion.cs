@@ -7,34 +7,35 @@ using ProductoProveedor.Contratos.Repositorio;
 using ProductoProveedor.Model;
 using System.Net;
 using System.Text.Json;
-
 namespace ProductoProveedor.EndPoint
 {
-    public class ProductoFunction
+    public class ProveedorFuncion
     {
-        private readonly ILogger<ProductoFunction> _logger;
-        private readonly IProductoRepositorio repos;
+        private readonly ILogger<ProveedorFuncion> _logger;
+        private readonly IProveedorRepositorio repos;
 
-        public ProductoFunction(ILogger<ProductoFunction> logger, IProductoRepositorio repos)
+
+        public ProveedorFuncion(ILogger<ProveedorFuncion> logger, IProveedorRepositorio repos)
         {
             _logger = logger;
             this.repos = repos;
         }
 
-        [Function("ProductoFunction")]
+        [Function("ProveedorFuncion")]
         public IActionResult Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
             return new OkObjectResult("Welcome to Azure Functions!");
         }
+
         /*----------------------Insertar--------------*/
-        [Function("ExperienciaInsertarFuncion")]
-        public async Task<HttpResponseData> InsertarExperiencia([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
+        [Function("ProveedorInsertarFuncion")]
+        public async Task<HttpResponseData> InsertarProveedor([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
         {
             HttpResponseData respuesta;
             try
             {
-                var registro = await req.ReadFromJsonAsync<ProductoModel>() ?? throw new Exception("debe ingresar un nuevo registro con todos los datos");
+                var registro = await req.ReadFromJsonAsync<ProveedorModel>() ?? throw new Exception("debe ingresar un nuevo registro con todos los datos");
                 registro.RowKey = Guid.NewGuid().ToString();
                 registro.Timestamp = DateTime.UtcNow;
                 bool sw = await repos.Creates(registro);
@@ -57,8 +58,8 @@ namespace ProductoProveedor.EndPoint
 
         }
         /*----------------------Listar todos--------------*/
-        [Function("ProductosListarTodosFuncion")]
-        public async Task<HttpResponseData> ListarTodosProductos([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req)
+        [Function("ProveedorListarTodosFuncion")]
+        public async Task<HttpResponseData> ListarTodosProveedor([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req)
         {
             HttpResponseData respuesta;
             try
@@ -76,9 +77,9 @@ namespace ProductoProveedor.EndPoint
 
         }
         /*----------------------Listar un registro--------------*/
-        [Function("ProductoListarUnoFuncion")]
-        public async Task<HttpResponseData> ListarUnProducto(
-        [HttpTrigger(AuthorizationLevel.Function, "get", Route = "obtenerproducto/{id}")] HttpRequestData req,
+        [Function("ProveedorListarUnoFuncion")]
+        public async Task<HttpResponseData> ListarUnoEstudio(
+        [HttpTrigger(AuthorizationLevel.Function, "get", Route = "obtenerproveedor/{id}")] HttpRequestData req,
          string id)
         {
             HttpResponseData respuesta;
@@ -98,17 +99,17 @@ namespace ProductoProveedor.EndPoint
             return respuesta;
         }
         /*----------------------Editar-----------------------*/
-        [Function("ProductoEditarFuncion")]
-        public async Task<HttpResponseData> EditarProducto(
-        [HttpTrigger(AuthorizationLevel.Function, "put", Route = "editarproducto/producto")] HttpRequestData req)
+        [Function("ProveedorEditarFuncion")]
+        public async Task<HttpResponseData> EditarExperiencia(
+        [HttpTrigger(AuthorizationLevel.Function, "put", Route = "editarProveedor/proveedor")] HttpRequestData req)
         {
             HttpResponseData respuesta;
 
             try
             {
                 string requestBody = await req.ReadAsStringAsync();
-                ProductoModel productos = JsonSerializer.Deserialize<ProductoModel>(requestBody);
-                bool success = await repos.Update(productos);
+                ProveedorModel experiencia = JsonSerializer.Deserialize<ProveedorModel>(requestBody);
+                bool success = await repos.Update(experiencia);
 
                 if (success)
                 {
@@ -127,9 +128,9 @@ namespace ProductoProveedor.EndPoint
             return respuesta;
         }
         /*----------------------Eliminar--------------*/
-        [Function("ProductosEliminarFuncion")]
-        public async Task<HttpResponseData> EliminarProductos(
-        [HttpTrigger(AuthorizationLevel.Function, "delete", Route = "eliminarProductos/{partitionkey}/{rowkey}")] HttpRequestData req,
+        [Function("ProveedorEliminarFuncion")]
+        public async Task<HttpResponseData> EliminarExperiencia(
+        [HttpTrigger(AuthorizationLevel.Function, "delete", Route = "eliminarproveedor/{partitionkey}/{rowkey}")] HttpRequestData req,
                                 string partitionkey,
                                 string rowkey)
         {
